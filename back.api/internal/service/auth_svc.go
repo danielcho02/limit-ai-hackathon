@@ -17,11 +17,10 @@ type authSvcImpl struct {
 	smtpCfg *config.SMTPConfig
 }
 
-func NewAuthService(userRepo interfaces.UserRepository, authCfg *config.AuthConfig, smtpCfg *config.SMTPConfig) *authSvcImpl {
+func NewAuthService(userRepo interfaces.UserRepository, authCfg *config.AuthConfig) *authSvcImpl {
 	return &authSvcImpl{
 		userRepo: userRepo,
 		authCfg:  authCfg,
-		smtpCfg: smtpCfg,
 	}
 }
 
@@ -38,7 +37,7 @@ func (s *authSvcImpl) HashCode(ctx context.Context, code string, salt string) st
 	return hex.EncodeToString(hashInBytes)
 }
 
-func (s *authSvcImpl) RegisterUser(ctx context.Context, ID int, email string, name string, enrollyear int, birthday string, password string) error {
+func (s *authSvcImpl) RegisterUser(ctx context.Context, ID int, name string, password string) error {
 
 	hashedPassword, err := auth.EncryptPassword(password)
 	if err != nil {

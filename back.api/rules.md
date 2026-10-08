@@ -12,6 +12,7 @@
 - presenter : convert domain struct into response struct(ex: domain.User -> v1.UserInfo)
 
 etc : utils(helper functions), config
+dependency injection(DI) : cmd/wire.go
 
 # Every Request passes Middleware
 - Error Handling
@@ -23,3 +24,7 @@ error handling middleware -> internal/middleware/error.go
 # Use Makefile for local-test
 In Makefile in root directory, many instructions(frequently used) are defined.
 
+# Documentation
+- Follow REST Convension
+- use godoc swagger auto-generation(make swag instruction)
+- clarify specific error message can be occured in each endpoint(defined in error/types.go)

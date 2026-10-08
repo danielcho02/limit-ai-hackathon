@@ -42,7 +42,7 @@ func (h *AuthHandler) RegisterLocalUser(c *gin.Context) {
 		return
 	}
 
-	err := h.authService.RegisterUser(ctx, req.ID, req.Email, req.Name, req.Password)
+	err := h.authService.RegisterUser(ctx, req.ID, req.Name, req.Password)
 	if err != nil {
 		c.Error(err)
 		return
@@ -65,7 +65,7 @@ func (h *AuthHandler) RegisterLocalUser(c *gin.Context) {
 // @Success      200      {object}  v1.Response{data=v1.LoginResponse}
 // @Failure      400  {object}  errors.AppError  "ErrShouldBindJson(5001): 잘못된 JSON 형식입니다."
 // @Failure      401  {object}  errors.AppError  "ErrPasswordMismatch(100): 비밀번호가 일치하지 않습니다."
-// @Failure      404  {object}  errors.AppError  "ErrUserNotFound(101): 존재하지 않는 학번입니다."
+// @Failure      404  {object}  errors.AppError  "ErrUserNotFound(101): 존재하지 않는 아이디입니다."
 // @Failure      500  {object}  errors.AppError  "ErrInternalServer(5000): 토큰 발급 실패"
 // @Router       /api/v1/auth/login [post]
 func (h *AuthHandler) Login(c *gin.Context) {
@@ -77,7 +77,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		return
 	}
 
-	accessToken, refreshToken, err := h.userUsecase.LoginUser(ctx, req.StudentID, req.Password)
+	accessToken, refreshToken, err := h.userUsecase.LoginUser(ctx, req.ID, req.Password)
 	if err != nil {
 		c.Error(err)
 		return

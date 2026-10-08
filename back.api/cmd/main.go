@@ -14,9 +14,9 @@ import (
 	_ "github.com/lib/pq"
 )
 
-// @title           title
+// @title           Limit Hackathon
 // @version         1.0
-// @description     description
+// @description     back-end API for limitthon
 // @host            localhost:8080
 // @BasePath        /api/v1
 // @securityDefinitions.apikey  BearerAuth
@@ -55,7 +55,7 @@ func main() {
 
 	authMiddleware := middleware.AuthMiddleware(cfg.Auth, cfg.App.Env)
 
-	wireUserDependency(r, authMiddleware, db, cfg)
+	wireAuthDependency(r, authMiddleware, db, cfg)
 
 	r.Run(":8080")
 }

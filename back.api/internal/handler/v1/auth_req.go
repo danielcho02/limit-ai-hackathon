@@ -5,11 +5,10 @@ type RegisterRequest struct {
 	Nickname string `json:"nickname"`
 	Password   string `json:"password"`
 	Name       string `json:"name"`
-	Email      string `json:"email"`
 }
 
 type LoginRequest struct {
-	StudentID int    `json:"student_id"`
+	ID int    `json:"id"`
 	Password  string `json:"password"`
 }
 
