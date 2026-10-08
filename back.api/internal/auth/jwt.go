@@ -15,7 +15,7 @@ type customClaims struct {
 }
 
 const (
-	DefaultIssuer = "dasom.io"
+	DefaultIssuer = "limitThon_8team"
 )
 
 // Token expires at expirationTime
