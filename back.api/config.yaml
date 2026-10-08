@@ -1,0 +1,24 @@
+app:
+  env: "${ENV}"
+  admin_key: "${ADMIN_KEY}"
+
+server:
+  port: 8080
+  host: "${HOST}"
+
+storage:
+  upload_path: "${UPLOAD_PATH}"
+db:
+  driver: "postgres"
+  db_host: "${DB_HOST}"
+  db_port: "${DB_PORT}"
+  db_user: "${DB_USER}"
+  db_password: "${DB_PASSWORD}"
+  db_name: "${DB_NAME}"
+
+auth:
+  access_secret: "${ACCESS_SECRET}"
+  refresh_secret: "${REFRESH_SECRET}"
+  access_duration: "${ACCESS_DURATION}"
+  refresh_duration: "${REFRESH_DURATION}"
+  email_verification_expiry: "${EMAIL_VERIFICATION_EXPIRY}"
