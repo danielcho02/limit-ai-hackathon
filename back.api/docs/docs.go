@@ -384,9 +384,402 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/posts": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Post"
+                ],
+                "summary": "게시글 목록 조회",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "게시글 카테고리 ID (0: 공지, ??? 구체화 필요)",
+                        "name": "category_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "게시글 제목 검색 키워드",
+                        "name": "title",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "작성자 ID",
+                        "name": "author_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "페이지네이션 오프셋 (기본값: 0)",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "페이지네이션 리밋 (기본값: 10)",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/v1.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/v1.GetPostsResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "ErrInvalidCategoryID(1003): 올바른 category_id 형태가 아닙니다.",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    },
+                    "401": {
+                        "description": "ErrTokenMissing(105) / ErrInvalidAuthHeader(104): Authorization 헤더가 없거나 형식이 올바르지 않습니다. / 유효하지 않은 토큰입니다.",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "ErrInternalServer(5000): 쿼리 파싱 실패 / ErrDatabase(9999): 목록 조회 실패",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Post"
+                ],
+                "summary": "게시글 생성",
+                "parameters": [
+                    {
+                        "description": "게시글 생성 요청 파라미터",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.CreatePostRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/v1.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/v1.GetPostDetailResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "ErrShouldBindJson(5001): 잘못된 JSON 형식입니다. / ErrInvalidCategoryID(1003): 올바른 category_id 형태가 아닙니다.",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    },
+                    "401": {
+                        "description": "ErrTokenMissing(105) / ErrInvalidAuthHeader(104): Authorization 헤더가 없거나 형식이 올바르지 않습니다. / 유효하지 않은 토큰입니다.",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    },
+                    "403": {
+                        "description": "ErrForbidden(108): 작성자 본인 또는 Admin이 아닙니다. / ErrForbiddenNotice(108): 공지사항은 관리자만 작성할 수 있습니다.",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "ErrDatabase(9999): 게시글 생성 실패",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/posts/{post_id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Post"
+                ],
+                "summary": "게시글 상세 조회",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "조회할 게시글 ID",
+                        "name": "post_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/v1.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/v1.GetPostDetailResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "ErrInvalidPostID(1002): post_id가 올바른 정수 형식이 아닙니다.",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    },
+                    "401": {
+                        "description": "ErrTokenMissing(105) / ErrInvalidAuthHeader(104): Authorization 헤더가 없거나 형식이 올바르지 않습니다. / 유효하지 않은 토큰입니다.",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    },
+                    "404": {
+                        "description": "ErrPostNotFound(1001): 존재하지 않는 게시글입니다.",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "ErrDatabase(9999): 조회수 증가 또는 조회 실패",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "작성자 본인 또는 Admin만 삭제할 수 있습니다.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Post"
+                ],
+                "summary": "게시글 삭제",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "삭제할 게시글 ID",
+                        "name": "post_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "$ref": "#/definitions/v1.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "ErrInvalidPostID(1002): post_id가 올바른 정수 형식이 아닙니다.",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    },
+                    "401": {
+                        "description": "ErrTokenMissing(105) / ErrInvalidAuthHeader(104): Authorization 헤더가 없거나 형식이 올바르지 않습니다. / 유효하지 않은 토큰입니다.",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    },
+                    "403": {
+                        "description": "ErrForbidden(108): 작성자 본인 또는 Admin이 아닙니다.",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    },
+                    "404": {
+                        "description": "ErrPostNotFound(1001): 존재하지 않는 게시글입니다.",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "ErrDatabase(9999): 게시글 삭제 실패",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "작성자 본인 또는 Admin만 수정할 수 있습니다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Post"
+                ],
+                "summary": "게시글 수정",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "수정할 게시글 ID",
+                        "name": "post_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "게시글 수정 요청 파라미터",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.UpdatePostRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/v1.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/v1.GetPostDetailResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "ErrInvalidPostID(1002): post_id가 올바른 정수 형식이 아닙니다. / ErrShouldBindJson(5001): 잘못된 JSON 형식입니다.",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    },
+                    "401": {
+                        "description": "ErrTokenMissing(105) / ErrInvalidAuthHeader(104): Authorization 헤더가 없거나 형식이 올바르지 않습니다. / 유효하지 않은 토큰입니다.",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    },
+                    "403": {
+                        "description": "ErrForbidden(108): 작성자 본인 또는 Admin이 아닙니다.",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    },
+                    "404": {
+                        "description": "ErrPostNotFound(1001): 존재하지 않는 게시글입니다.",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "ErrDatabase(9999): 게시글 수정 실패",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "domain.CategoryType": {
+            "type": "integer",
+            "enum": [
+                0,
+                1
+            ],
+            "x-enum-comments": {
+                "NoticePost": "0 공지글"
+            },
+            "x-enum-descriptions": [
+                "0 공지글",
+                ""
+            ],
+            "x-enum-varnames": [
+                "NoticePost",
+                "CategoryTypeMax"
+            ]
+        },
         "domain.RoleType": {
             "type": "integer",
             "enum": [
@@ -435,6 +828,8 @@ const docTemplate = `{
                 1001,
                 1002,
                 2001,
+                2002,
+                2003,
                 3001,
                 3002,
                 3003,
@@ -458,7 +853,9 @@ const docTemplate = `{
                 "BadRoleUpgradeRequestErrorCode",
                 "EmailVerificationErrorCode",
                 "EmailVerificationNotFoundErrorCode",
-                "PostNotFountErrorCode",
+                "PostNotFoundErrorCode",
+                "InvalidCategoryIDErrorCode",
+                "InvalidPostIDErrorCode",
                 "FileNotFoundErrorCode",
                 "UnsupportedFileErrorCode",
                 "FileOpenErrorCode",
@@ -470,11 +867,137 @@ const docTemplate = `{
                 "DBErrorCode"
             ]
         },
+        "utils.PaginationMetadata": {
+            "type": "object",
+            "properties": {
+                "current_page": {
+                    "type": "integer"
+                },
+                "next_offset": {
+                    "type": "integer"
+                },
+                "prev_offset": {
+                    "type": "integer"
+                },
+                "total_count": {
+                    "type": "integer"
+                }
+            }
+        },
         "v1.AuthRefreshResponse": {
             "type": "object",
             "properties": {
                 "access_token": {
                     "type": "string"
+                }
+            }
+        },
+        "v1.CommentInfo": {
+            "type": "object",
+            "properties": {
+                "author_id": {
+                    "type": "integer"
+                },
+                "author_name": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "v1.CreatePostRequest": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "$ref": "#/definitions/domain.CategoryType"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "files": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "v1.FileInfo": {
+            "type": "object",
+            "properties": {
+                "file_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "v1.GetPostDetailResponse": {
+            "type": "object",
+            "properties": {
+                "author_id": {
+                    "type": "integer"
+                },
+                "author_name": {
+                    "type": "string"
+                },
+                "category_id": {
+                    "$ref": "#/definitions/domain.CategoryType"
+                },
+                "comments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/v1.CommentInfo"
+                    }
+                },
+                "content": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "files": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/v1.FileInfo"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "views": {
+                    "type": "integer"
+                }
+            }
+        },
+        "v1.GetPostsResponse": {
+            "type": "object",
+            "properties": {
+                "pagination": {
+                    "$ref": "#/definitions/utils.PaginationMetadata"
+                },
+                "posts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/v1.PostInfo"
+                    }
                 }
             }
         },
@@ -497,6 +1020,32 @@ const docTemplate = `{
                 },
                 "refresh_token": {
                     "type": "string"
+                }
+            }
+        },
+        "v1.PostInfo": {
+            "type": "object",
+            "properties": {
+                "author_name": {
+                    "type": "string"
+                },
+                "category_id": {
+                    "$ref": "#/definitions/domain.CategoryType"
+                },
+                "comment_count": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "views": {
+                    "type": "integer"
                 }
             }
         },
@@ -530,6 +1079,26 @@ const docTemplate = `{
             "properties": {
                 "data": {},
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "v1.UpdatePostRequest": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "$ref": "#/definitions/domain.CategoryType"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "files": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "title": {
                     "type": "string"
                 }
             }

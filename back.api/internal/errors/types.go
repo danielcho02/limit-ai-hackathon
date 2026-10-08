@@ -21,7 +21,9 @@ const (
 	EmailVerificationNotFoundErrorCode ErrorCode = 1002
 
 	// 2. Post
-	PostNotFountErrorCode ErrorCode = 2001
+	PostNotFoundErrorCode ErrorCode = 2001
+	InvalidCategoryIDErrorCode ErrorCode = 2002
+	InvalidPostIDErrorCode ErrorCode = 2003
 
 	// 3. File
 	FileNotFoundErrorCode ErrorCode = 3001
@@ -59,7 +61,9 @@ var (
 	ErrInvalidResetPasswordRequest = NewAppError(400, EmailVerificationErrorCode, "이메일 인증 정보가 일치하지 않습니다.")
 
 	// Post 관련
-	ErrPostNotFound = NewAppError(404, PostNotFountErrorCode, "이메일 인증에 실패했습니다.")
+	ErrPostNotFound = NewAppError(404, PostNotFoundErrorCode, "존재하지 않는 게시글입니다.")
+	ErrInvalidCategoryID = NewAppError(400, InvalidCategoryIDErrorCode, "올바른 category_id가 아닙니다.")
+	ErrInvalidPostID = NewAppError(400, InvalidPostIDErrorCode, "올바른 post_id가 아닙니다.")
 
 	// File 관련
 	ErrFileNotFound = NewAppError(404, FileNotFoundErrorCode, "존재하지 않는 파일입니다.")

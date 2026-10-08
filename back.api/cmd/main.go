@@ -55,7 +55,8 @@ func main() {
 
 	authMiddleware := middleware.AuthMiddleware(cfg.Auth, cfg.App.Env)
 
-	wireAuthDependency(r, authMiddleware, db, cfg)
+	wireAuthDependency(r, db, cfg)
+	wirePostDependency(r, authMiddleware, db, cfg)
 
 	r.Run(":8080")
 }
