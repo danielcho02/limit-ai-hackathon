@@ -8,7 +8,8 @@ type CategoryType int
 
 
 const (
-	NoticePost CategoryType = iota // 0 공지사항
+	NoticePost CategoryType = iota // 0 공지글
+	
 
 	CategoryTypeMax
 )

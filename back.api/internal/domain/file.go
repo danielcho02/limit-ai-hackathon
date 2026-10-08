@@ -6,6 +6,7 @@ import (
 
 type FileType string
 
+// file에 대한 메타데이터를 담은 구조체. 실제 파일 X
 type File struct {
 	ID       int    `gorm:"primaryKey"` // 파일 고유 pk
 
