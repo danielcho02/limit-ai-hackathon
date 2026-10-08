@@ -26,8 +26,15 @@ func wireAuthDependency(r *gin.Engine, db *gorm.DB, cfg *config.Config) {
 		//3. 토큰 재발급
 		public.POST("/refresh", authHandler.RefreshToken)
 	}
+}
 
-	
+func wireUserDependency(r *gin.Engine, authMiddleware gin.HandlerFunc, db *gorm.DB) {
+	userHandler := handler.NewUserHandler(db)
+
+	protected := r.Group("/api/v1/user").Use(authMiddleware)
+	{
+		protected.PATCH("/profile", userHandler.UpdateProfile)
+	}
 }
 
 func wirePostDependency(r *gin.Engine, authMiddleware gin.HandlerFunc, db *gorm.DB, cfg *config.Config) {
@@ -46,3 +53,28 @@ func wirePostDependency(r *gin.Engine, authMiddleware gin.HandlerFunc, db *gorm.
 	}
 }
 
+func wireFileDependency(r *gin.Engine, authMiddleware gin.HandlerFunc, db *gorm.DB, cfg *config.Config) {
+	fileSvc := service.NewFileService(cfg.Storage)
+	fileRepo := repository.NewFileRepository(db)
+	fileUc := usecase.NewFileUsecase(fileSvc, fileRepo, cfg.Storage)
+	fileHandler := handler.NewFileHandler(fileSvc, fileUc, fileRepo)
+
+	protected := r.Group("/api/v1/files").Use(authMiddleware)
+	{
+		protected.POST("", fileHandler.UploadFile)
+		protected.GET("/:file_id", fileHandler.DownloadFile)
+		protected.DELETE("/:file_id", fileHandler.DeleteFile)
+	}
+}
+
+func wireCommentDependency(r *gin.Engine, authMiddleware gin.HandlerFunc, db *gorm.DB, cfg *config.Config) {
+	commentRepo := repository.NewCommentRepository(db)
+	commentUc := usecase.NewCommentUsecase(commentRepo)
+	commentHandler := handler.NewCommentHandler(commentUc)
+
+	protected := r.Group("/api/v1/comments").Use(authMiddleware)
+	{
+		protected.POST("/:post_id", commentHandler.CreateComment)
+		protected.DELETE("/:comment_id", commentHandler.DeleteComment)
+	}
+}

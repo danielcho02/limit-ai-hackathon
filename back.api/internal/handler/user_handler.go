@@ -74,4 +74,4 @@ func (h *UserHandler) UpdateProfile(c *gin.Context) {
 		Message: "프로필 수정 성공",
 	})
 
-} 
+}

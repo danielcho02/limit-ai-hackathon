@@ -57,6 +57,8 @@ func main() {
 
 	wireAuthDependency(r, db, cfg)
 	wirePostDependency(r, authMiddleware, db, cfg)
+	wireUserDependency(r, authMiddleware, db)
+	wireFileDependency(r, authMiddleware, db, cfg)
 
 	r.Run(":8080")
 }

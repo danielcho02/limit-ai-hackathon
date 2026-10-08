@@ -35,7 +35,7 @@ func NewCommentHandler(commentUsecase interfaces.CommentUsecase) *CommentHandler
 // @Failure      401      {object}  errors.AppError  "ErrTokenMissing(105) / ErrInvalidAuthHeader(104): Authorization 헤더가 없거나 형식이 올바르지 않습니다. / 유효하지 않은 토큰입니다."
 // @Failure      404      {object}  errors.AppError  "(참고) 현재 구현은 post_id 존재 여부를 사전 검증하지 않아 실제로는 반환되지 않습니다 - 존재하지 않는 post_id는 500(ErrDatabase)으로 처리됩니다."
 // @Failure      500      {object}  errors.AppError  "ErrDatabase(9999): 댓글 저장 실패 / 존재하지 않는 post_id로 인한 외래키 위반"
-// @Router       /api/v1/posts/{post_id}/comments [post]
+// @Router       /api/v1/comments/{post_id} [post]
 func (h *CommentHandler) CreateComment(c *gin.Context) {
 	ctx := c.Request.Context()
 
