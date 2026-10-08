@@ -31,7 +31,7 @@ func (r *CommentRepository) GetByID(ctx context.Context, commentID int) (*domain
 
 	err := r.db.WithContext(ctx).
 		Model(&domain.Comment{}).
-		Select("comments.*, users.name AS author_nickname").
+		Select("comments.*, users.nickname AS author_nickname").
 		Joins("LEFT JOIN users ON users.id = comments.user_id").
 		Where("comments.id = ?", commentID).
 		First(&comment).Error

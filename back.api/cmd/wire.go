@@ -45,11 +45,11 @@ func wirePostDependency(r *gin.Engine, authMiddleware gin.HandlerFunc, db *gorm.
 	// Protected 라우트
 	protected := r.Group("/api/v1/post").Use(authMiddleware)
 	{
-		protected.GET("/posts", postHandler.GetPosts)
-		protected.POST("/posts", postHandler.CreatePost)
-		protected.DELETE("/posts/:post_id", postHandler.DeletePost)
-		protected.GET("/posts/:post_id", postHandler.GetPostDetail)
-		protected.PATCH("/posts/:post_id", postHandler.UpdatePost)
+		protected.GET("", postHandler.GetPosts)
+		protected.POST("", postHandler.CreatePost)
+		protected.DELETE("/:post_id", postHandler.DeletePost)
+		protected.GET("/:post_id", postHandler.GetPostDetail)
+		protected.PATCH("/:post_id", postHandler.UpdatePost)
 	}
 }
 
