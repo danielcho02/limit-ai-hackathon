@@ -43,7 +43,7 @@ func wirePostDependency(r *gin.Engine, authMiddleware gin.HandlerFunc, db *gorm.
 	postHandler := handler.NewPostHandler(postUsecase, *cfg)
 
 	// Protected 라우트
-	protected := r.Group("/api/v1/post").Use(authMiddleware)
+	protected := r.Group("/api/v1/posts").Use(authMiddleware)
 	{
 		protected.GET("", postHandler.GetPosts)
 		protected.POST("", postHandler.CreatePost)
