@@ -38,6 +38,9 @@ definitions:
     - 1002
     - 2001
     - 3001
+    - 3002
+    - 3003
+    - 3004
     - 5000
     - 5001
     - 5003
@@ -59,6 +62,9 @@ definitions:
     - EmailVerificationNotFoundErrorCode
     - PostNotFountErrorCode
     - FileNotFoundErrorCode
+    - UnsupportedFileErrorCode
+    - FileOpenErrorCode
+    - InvalidFileIDErrorCode
     - InternalServerErrorCode
     - ShouldBindJsonErrorCode
     - ParseTemplateErrorCode
@@ -104,6 +110,11 @@ definitions:
       data: {}
       message:
         type: string
+    type: object
+  v1.UploadFileResponse:
+    properties:
+      file_id:
+        type: integer
     type: object
 host: localhost:8080
 info:
@@ -227,6 +238,132 @@ paths:
       summary: 회원가입
       tags:
       - Auth
+  /api/v1/files:
+    post:
+      consumes:
+      - multipart/form-data
+      description: '허용 확장자: .jpg, .jpeg, .png, .gif, .pdf, .mp4'
+      parameters:
+      - description: 업로드할 파일(single)
+        in: formData
+        name: files
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/v1.UploadFileResponse'
+              type: object
+        "400":
+          description: 'ErrShouldBindJson(5001): multipart form 파싱 실패. / ErrBadRequest(5001):
+            files 파트가 비어 있습니다. / ErrUnsupportedFile(5103): 지원하지 않는 파일 확장자입니다.'
+          schema:
+            $ref: '#/definitions/errors.AppError'
+        "401":
+          description: 'ErrTokenMissing(105) / ErrInvalidAuthHeader(104): Authorization
+            헤더가 없거나 형식이 올바르지 않습니다. / 유효하지 않은 토큰입니다.'
+          schema:
+            $ref: '#/definitions/errors.AppError'
+        "500":
+          description: 'ErrFileOpen(5102): 업로드 파일 열기 실패. / ErrDatabase(9999): 파일 메타데이터
+            저장 실패.'
+          schema:
+            $ref: '#/definitions/errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: 파일 업로드
+      tags:
+      - File
+  /api/v1/files/{file_id}:
+    delete:
+      description: 업로더 본인 또는 Admin만 삭제할 수 있습니다.
+      parameters:
+      - description: 삭제할 파일 ID
+        in: path
+        name: file_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/v1.Response'
+        "400":
+          description: 'ErrInvalidFileID(5102): file_id가 올바른 정수 형식이 아닙니다.'
+          schema:
+            $ref: '#/definitions/errors.AppError'
+        "401":
+          description: 'ErrTokenMissing(105) / ErrInvalidAuthHeader(104): Authorization
+            헤더가 없거나 형식이 올바르지 않습니다. / 유효하지 않은 토큰입니다.'
+          schema:
+            $ref: '#/definitions/errors.AppError'
+        "403":
+          description: 'ErrForbidden(108): 업로더 본인 또는 Admin이 아닙니다.'
+          schema:
+            $ref: '#/definitions/errors.AppError'
+        "404":
+          description: 'ErrFileNotFound(5104): 존재하지 않는 파일입니다.'
+          schema:
+            $ref: '#/definitions/errors.AppError'
+        "500":
+          description: 'ErrDatabase(9999): 파일 삭제 실패'
+          schema:
+            $ref: '#/definitions/errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: 파일 삭제
+      tags:
+      - File
+    get:
+      description: 이미지, 텍스트, HTML 파일은 브라우저에서 직접 열리며, 나머지(webp, MP4 등)는 다운로드됩니다. 이미
+        게시글에 첨부된 파일은 누구나(인증된 사용자라면) 다운로드할 수 있고, 아직 게시글에 첨부되지 않은 파일은 업로더 본인 또는 Admin만
+        다운로드할 수 있습니다.
+      parameters:
+      - description: 파일 ID
+        in: path
+        name: file_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+        "400":
+          description: 'ErrInvalidFileID(5102): file_id가 올바른 정수 형식이 아닙니다.'
+          schema:
+            $ref: '#/definitions/errors.AppError'
+        "401":
+          description: 'ErrTokenMissing(105) / ErrInvalidAuthHeader(104): Authorization
+            헤더가 없거나 형식이 올바르지 않습니다. / 유효하지 않은 토큰입니다.'
+          schema:
+            $ref: '#/definitions/errors.AppError'
+        "403":
+          description: 'ErrForbidden(108): 게시글에 첨부되지 않은 파일에 대해 업로더 본인/Admin이 아닙니다.'
+          schema:
+            $ref: '#/definitions/errors.AppError'
+        "404":
+          description: 'ErrFileNotFound(5104): 존재하지 않는 파일입니다.'
+          schema:
+            $ref: '#/definitions/errors.AppError'
+        "500":
+          description: 'ErrDatabase(9999) 등: 파일 스트림을 여는 중 내부 서버 오류'
+          schema:
+            $ref: '#/definitions/errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: 파일 다운로드
+      tags:
+      - File
 securityDefinitions:
   BearerAuth:
     description: '"Bearer {access_token}" 형식으로 전달합니다. 로그인(`/auth/login`) 또는 회원가입(`/auth/register`)

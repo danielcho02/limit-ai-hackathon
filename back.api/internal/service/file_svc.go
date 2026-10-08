@@ -17,11 +17,6 @@ import (
 var allowedExtensions = map[domain.FileType]bool{
 	".jpg": true, ".jpeg": true, ".png": true, ".gif": true, ".webp": true,
 	".pdf": true, ".mp4": true,
-	".zip": true, ".docx": true, ".doc": true, ".pptx": true, ".ppt": true,
-	".xlsx": true, ".xls": true, ".hwp": true, ".hwpx": true,
-	".txt": true, ".md": true, ".csv": true,
-	".c": true, ".cpp": true, ".py": true, ".java": true, ".ipynb": true,
-	".rs": true, ".toml": true, // 러스트는위대하시다찬양하라
 }
 
 type fileServiceImpl struct {

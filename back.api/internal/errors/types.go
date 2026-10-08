@@ -25,6 +25,9 @@ const (
 
 	// 3. File
 	FileNotFoundErrorCode ErrorCode = 3001
+	UnsupportedFileErrorCode ErrorCode = 3002
+	FileOpenErrorCode ErrorCode = 3003
+	InvalidFileIDErrorCode ErrorCode = 3004
 
 	// Internal Server Error
 	InternalServerErrorCode ErrorCode = 5000
@@ -60,6 +63,9 @@ var (
 
 	// File 관련
 	ErrFileNotFound = NewAppError(404, FileNotFoundErrorCode, "존재하지 않는 파일입니다.")
+	ErrUnsupportedFile = NewAppError(400, UnsupportedFileErrorCode, "지원되지 않는 파일 확장자입니다.")
+	ErrFileOpen = NewAppError(500, FileOpenErrorCode, "파일 다운로드를 실패했습니다.")
+	ErrInvalidFileID = NewAppError(400, InvalidFileIDErrorCode, "올바른 file_id 형태가 아닙니다.")
 
 	// System 관련
 	ErrShouldBindJson = NewAppError(400, ShouldBindJsonErrorCode, "잘못된 JSON 형식입니다.")
