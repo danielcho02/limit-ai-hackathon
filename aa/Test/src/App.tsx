@@ -366,16 +366,6 @@ function Home({
             </button>
           </div>
         </div>
-        <div className="hero-art" aria-hidden="true">
-          <div className="sun" />
-          <div className="devil">
-            재능
-            <br />
-            <span>낭비중</span>
-          </div>
-          <div className="orbit orbit-one">+1</div>
-          <div className="orbit orbit-two">쓸모</div>
-        </div>
       </section>
 
       <section className="section-block">
