@@ -1,0 +1,10 @@
+{
+  "description": "Connects talent providers with individuals and organizations seeking light assistance, enhancing accessibility to skill-sharing and fostering community engagement.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
