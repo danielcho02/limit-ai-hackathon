@@ -9,6 +9,7 @@ import (
 
 	database "main/internal/infra/db"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
 	_ "github.com/lib/pq"
@@ -49,6 +50,7 @@ func main() {
 
 
 	r := gin.New()
+	r.Use(cors.Default())
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 	r.Use(middleware.ErrorMiddleware())
@@ -59,6 +61,6 @@ func main() {
 	wirePostDependency(r, authMiddleware, db, cfg)
 	wireUserDependency(r, authMiddleware, db)
 	wireFileDependency(r, authMiddleware, db, cfg)
-
+	wireCommentDependency(r, authMiddleware, db, cfg)
 	r.Run(":8080")
 }

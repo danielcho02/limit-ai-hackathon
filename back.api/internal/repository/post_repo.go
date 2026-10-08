@@ -71,11 +71,11 @@ func (r *postRepoImpl) GetByID(ctx context.Context, id int) (*domain.Post, error
 	var post domain.Post
 	if err := r.db.WithContext(ctx).
 		Model(&domain.Post{}).
-		Select("posts.*, users.name AS author_name").
+		Select("posts.*, users.nickname AS author_name").
 		Joins("LEFT JOIN users ON users.id = posts.author_id").
 		Preload("Files").
 		Preload("Comments", func(db *gorm.DB) *gorm.DB {
-			return db.Select("comments.*, users.name AS author_nickname").
+			return db.Select("comments.*, users.nickname AS author_nickname").
 				Joins("LEFT JOIN users ON users.id = comments.user_id").
 				Order("comments.created_at ASC")
 		}).
@@ -95,7 +95,7 @@ func (r *postRepoImpl) GetMany(ctx context.Context, query domain.PostQuery) ([]d
 
 	db := buildQuery(ctx,r.db, query)
 
-    if err := db.Select("posts.id, posts.title, posts.category_id, posts.views, posts.created_at, users.name as author_name, (SELECT COUNT(*) FROM comments WHERE comments.post_id = posts.id) as comment_count").
+    if err := db.Select("posts.id, posts.title, posts.category_id, posts.views, posts.created_at, users.nickname as author_name, (SELECT COUNT(*) FROM comments WHERE comments.post_id = posts.id) as comment_count").
         Scopes(paginate(query.Offset, query.Limit)).
         Order("posts.created_at DESC").
         Scan(&postList).Error; err != nil {
