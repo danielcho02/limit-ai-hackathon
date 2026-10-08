@@ -71,7 +71,7 @@ const docTemplate = `{
                         }
                     },
                     "404": {
-                        "description": "ErrUserNotFound(101): 존재하지 않는 학번입니다.",
+                        "description": "ErrUserNotFound(101): 존재하지 않는 아이디입니다.",
                         "schema": {
                             "$ref": "#/definitions/errors.AppError"
                         }
@@ -151,7 +151,7 @@ const docTemplate = `{
         },
         "/api/v1/auth/register": {
             "post": {
-                "description": "회원가입을 위한 API. 학번, 비밀번호, 이름, 이메일, 입학연도 정보를 받아 회원을 등록합니다. email_verification_id는 반드시 verify-email로 검증에 성공한(사용됨 처리된) 레코드여야 하며, 그 레코드의 email과 요청의 email이 일치해야 합니다.",
+                "description": "회원가입을 위한 API. ID, 비밀번호, 닉네임 정보를 받아 회원을 등록합니다.",
                 "consumes": [
                     "application/json"
                 ],
@@ -197,6 +197,21 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "domain.RoleType": {
+            "type": "integer",
+            "enum": [
+                0,
+                1,
+                2,
+                999
+            ],
+            "x-enum-varnames": [
+                "DefaultRole",
+                "UserRole",
+                "OrganizationRole",
+                "AdminRole"
+            ]
+        },
         "errors.AppError": {
             "type": "object",
             "properties": {
@@ -303,14 +318,14 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "name": {
-                    "type": "string"
-                },
                 "nickname": {
                     "type": "string"
                 },
                 "password": {
                     "type": "string"
+                },
+                "role": {
+                    "$ref": "#/definitions/domain.RoleType"
                 }
             }
         },

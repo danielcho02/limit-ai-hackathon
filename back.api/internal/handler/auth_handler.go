@@ -24,7 +24,7 @@ func NewAuthHandler(authService svcInterface.AuthService, userUsecase ucInterfac
 
 // Register godoc
 // @Summary      회원가입
-// @Description  회원가입을 위한 API. 학번, 비밀번호, 이름, 이메일, 입학연도 정보를 받아 회원을 등록합니다. email_verification_id는 반드시 verify-email로 검증에 성공한(사용됨 처리된) 레코드여야 하며, 그 레코드의 email과 요청의 email이 일치해야 합니다.
+// @Description  회원가입을 위한 API. ID, 비밀번호, 닉네임 정보를 받아 회원을 등록합니다.
 // @Tags         Auth
 // @Accept       json
 // @Produce      json
@@ -42,7 +42,7 @@ func (h *AuthHandler) RegisterLocalUser(c *gin.Context) {
 		return
 	}
 
-	err := h.authService.RegisterUser(ctx, req.ID, req.Name, req.Password)
+	err := h.authService.RegisterUser(ctx, req.ID, req.Nickname, req.Password)
 	if err != nil {
 		c.Error(err)
 		return

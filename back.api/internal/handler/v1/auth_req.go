@@ -1,10 +1,12 @@
 package v1
 
+import "main/internal/domain"
+
 type RegisterRequest struct {
 	ID  int    `json:"id"`
 	Nickname string `json:"nickname"`
 	Password   string `json:"password"`
-	Name       string `json:"name"`
+	Role domain.RoleType `json:"role"`
 }
 
 type LoginRequest struct {
