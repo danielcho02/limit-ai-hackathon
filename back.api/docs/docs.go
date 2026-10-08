@@ -540,6 +540,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
+                "description": "category_id는 다음과 같습니다.(0: 공지 1: 예술 2: 환경 3: 교육 4: 상담 5: 스포츠 6: 미용 7: 기타)",
                 "consumes": [
                     "application/json"
                 ],
@@ -911,17 +912,45 @@ const docTemplate = `{
             "type": "integer",
             "enum": [
                 0,
-                1
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
             ],
             "x-enum-comments": {
-                "NoticePost": "0 공지글"
+                "ArtPost": "1 예술",
+                "BeautyPost": "6 미용",
+                "ConsultPost": "4 상담",
+                "ETCPost": "7 기타",
+                "EducationPost": "3 교육",
+                "EnvironmentPost": "2 환경",
+                "NoticePost": "0 공지글",
+                "SportsPost": "5 스포츠"
             },
             "x-enum-descriptions": [
                 "0 공지글",
+                "1 예술",
+                "2 환경",
+                "3 교육",
+                "4 상담",
+                "5 스포츠",
+                "6 미용",
+                "7 기타",
                 ""
             ],
             "x-enum-varnames": [
                 "NoticePost",
+                "ArtPost",
+                "EnvironmentPost",
+                "EducationPost",
+                "ConsultPost",
+                "SportsPost",
+                "BeautyPost",
+                "ETCPost",
                 "CategoryTypeMax"
             ]
         },

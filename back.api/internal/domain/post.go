@@ -9,7 +9,13 @@ type CategoryType int
 
 const (
 	NoticePost CategoryType = iota // 0 공지글
-	
+	ArtPost // 1 예술
+	EnvironmentPost // 2 환경
+	EducationPost // 3 교육
+	ConsultPost // 4 상담
+	SportsPost // 5 스포츠
+	BeautyPost // 6 미용
+	ETCPost // 7 기타
 
 	CategoryTypeMax
 )

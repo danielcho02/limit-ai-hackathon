@@ -28,6 +28,7 @@ func NewPostHandler(uc interfaces.PostUsecase, cfg config.Config) *PostHandler {
 
 // CreatePost godoc
 // @Summary      게시글 생성
+// @Description  category_id는 다음과 같습니다.(0: 공지 1: 예술 2: 환경 3: 교육 4: 상담 5: 스포츠 6: 미용 7: 기타)
 // @Security     BearerAuth
 // @Tags         Post
 // @Accept       json
