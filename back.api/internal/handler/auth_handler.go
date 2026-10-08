@@ -24,7 +24,7 @@ func NewAuthHandler(authService svcInterface.AuthService, userUsecase ucInterfac
 
 // Register godoc
 // @Summary      회원가입
-// @Description  회원가입을 위한 API. ID, 비밀번호, 닉네임 정보를 받아 회원을 등록합니다. role은 다음과 같습니다. (0: defaultRole, 1: user, 2: orginization, 999: admin)
+// @Description  회원가입을 위한 API. ID, 비밀번호, 닉네임 정보를 받아 회원을 등록합니다. role은 다음과 같습니다. (0: defaultRole(권한 없음), 1: user, 999: admin)
 // @Tags         Auth
 // @Accept       json
 // @Produce      json

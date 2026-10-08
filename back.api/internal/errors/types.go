@@ -31,6 +31,10 @@ const (
 	FileOpenErrorCode ErrorCode = 3003
 	InvalidFileIDErrorCode ErrorCode = 3004
 
+	// 4.Comment
+	CommentNotFoundErrorCode ErrorCode = 4001
+	InvalidCommentIDErrorCode ErrorCode = 4002
+
 	// Internal Server Error
 	InternalServerErrorCode ErrorCode = 5000
 	ShouldBindJsonErrorCode  ErrorCode = 5001
@@ -70,6 +74,10 @@ var (
 	ErrUnsupportedFile = NewAppError(400, UnsupportedFileErrorCode, "지원되지 않는 파일 확장자입니다.")
 	ErrFileOpen = NewAppError(500, FileOpenErrorCode, "파일 다운로드를 실패했습니다.")
 	ErrInvalidFileID = NewAppError(400, InvalidFileIDErrorCode, "올바른 file_id 형태가 아닙니다.")
+
+	// Comment 관련
+	ErrCommentNotFound = NewAppError(404, CommentNotFoundErrorCode, "존재하지 않는 댓글입니다.")
+	ErrInvalidCommentID = NewAppError(400, InvalidCommentIDErrorCode, "올바른 comment_id가 아닙니다..")
 
 	// System 관련
 	ErrShouldBindJson = NewAppError(400, ShouldBindJsonErrorCode, "잘못된 JSON 형식입니다.")

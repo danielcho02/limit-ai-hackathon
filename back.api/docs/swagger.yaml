@@ -17,13 +17,11 @@ definitions:
     enum:
     - 0
     - 1
-    - 2
     - 999
     type: integer
     x-enum-varnames:
     - DefaultRole
     - UserRole
-    - OrganizationRole
     - AdminRole
   errors.AppError:
     properties:
@@ -56,6 +54,8 @@ definitions:
     - 3002
     - 3003
     - 3004
+    - 4001
+    - 4002
     - 5000
     - 5001
     - 5003
@@ -82,6 +82,8 @@ definitions:
     - UnsupportedFileErrorCode
     - FileOpenErrorCode
     - InvalidFileIDErrorCode
+    - CommentNotFoundErrorCode
+    - InvalidCommentIDErrorCode
     - InternalServerErrorCode
     - ShouldBindJsonErrorCode
     - ParseTemplateErrorCode
@@ -115,6 +117,13 @@ definitions:
         type: string
       id:
         type: integer
+    type: object
+  v1.CreateCommentRequest:
+    properties:
+      content:
+        type: string
+    required:
+    - content
     type: object
   v1.CreatePostRequest:
     properties:
@@ -367,6 +376,48 @@ paths:
       summary: 회원가입
       tags:
       - Auth
+  /api/v1/comments/{comment_id}:
+    delete:
+      description: 작성자 본인 또는 Admin만 삭제할 수 있습니다.
+      parameters:
+      - description: 삭제할 댓글 ID
+        in: path
+        name: comment_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/v1.Response'
+        "400":
+          description: 'ErrInvalidCommentID(4002): comment_id가 올바른 정수 형식이 아닙니다.'
+          schema:
+            $ref: '#/definitions/errors.AppError'
+        "401":
+          description: 'ErrTokenMissing(105) / ErrInvalidAuthHeader(104): Authorization
+            헤더가 없거나 형식이 올바르지 않습니다. / 유효하지 않은 토큰입니다.'
+          schema:
+            $ref: '#/definitions/errors.AppError'
+        "403":
+          description: 'ErrForbidden(108): 작성자 본인 또는 Admin이 아닙니다.'
+          schema:
+            $ref: '#/definitions/errors.AppError'
+        "404":
+          description: 'ErrCommentNotFound(4001): 존재하지 않는 댓글입니다.'
+          schema:
+            $ref: '#/definitions/errors.AppError'
+        "500":
+          description: 'ErrDatabase(9999): 댓글 삭제 실패'
+          schema:
+            $ref: '#/definitions/errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: 댓글 삭제
+      tags:
+      - Comment
   /api/v1/files:
     post:
       consumes:
@@ -731,6 +782,58 @@ paths:
       summary: 게시글 수정
       tags:
       - Post
+  /api/v1/posts/{post_id}/comments:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 게시글 ID
+        in: path
+        name: post_id
+        required: true
+        type: integer
+      - description: 댓글 생성 요청
+        in: body
+        name: comment
+        required: true
+        schema:
+          $ref: '#/definitions/v1.CreateCommentRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/v1.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/v1.CommentInfo'
+              type: object
+        "400":
+          description: 'ErrInvalidPostID(1002): post_id가 올바른 정수 형식이 아닙니다. / ErrShouldBindJson(5001):
+            잘못된 JSON 형식입니다.'
+          schema:
+            $ref: '#/definitions/errors.AppError'
+        "401":
+          description: 'ErrTokenMissing(105) / ErrInvalidAuthHeader(104): Authorization
+            헤더가 없거나 형식이 올바르지 않습니다. / 유효하지 않은 토큰입니다.'
+          schema:
+            $ref: '#/definitions/errors.AppError'
+        "404":
+          description: (참고) 현재 구현은 post_id 존재 여부를 사전 검증하지 않아 실제로는 반환되지 않습니다 - 존재하지
+            않는 post_id는 500(ErrDatabase)으로 처리됩니다.
+          schema:
+            $ref: '#/definitions/errors.AppError'
+        "500":
+          description: 'ErrDatabase(9999): 댓글 저장 실패 / 존재하지 않는 post_id로 인한 외래키 위반'
+          schema:
+            $ref: '#/definitions/errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: 댓글 생성
+      tags:
+      - Comment
 securityDefinitions:
   BearerAuth:
     description: '"Bearer {access_token}" 형식으로 전달합니다. 로그인(`/auth/login`) 또는 회원가입(`/auth/register`)
