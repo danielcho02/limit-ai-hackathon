@@ -45,11 +45,3 @@ func (r *userRepoImpl) GetByID(ctx context.Context, userID int) (*domain.User, e
 	}
 	return &user, nil
 }
-
-func (r *userRepoImpl) GetByEmail(ctx context.Context, email string) (*domain.User, error) {
-	var user domain.User
-	if err := r.db.Where("email = ?", email).First(&user).Error; err != nil {
-		return nil, errors.ErrUserNotFound.Wrap(err)
-	}
-	return &user, nil
-}

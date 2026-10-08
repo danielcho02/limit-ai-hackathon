@@ -30,8 +30,7 @@ func NewAuthHandler(authService svcInterface.AuthService, userUsecase ucInterfac
 // @Produce      json
 // @Param        request  body      v1.RegisterRequest  true  "회원가입 요청 파라미터"
 // @Success      201      {object}  v1.Response
-// @Failure      400      {object}  errors.AppError  "ErrShouldBindJson(5001): 잘못된 JSON 형식입니다. / ErrEmailVerification(5201): 이메일 인증이 완료되지 않았습니다. / ErrEmailVerificationExpired(5201): 이메일 인증이 만료되었습니다. / ErrInvalidResetPasswordRequest(5201): 인증된 이메일과 요청 이메일이 일치하지 않습니다. / ErrUserAlreadyExists(103): 이미 존재하는 사용자입니다."
-// @Failure      404      {object}  errors.AppError  "ErrEmailVerificationNotFound(5202): email_verification_id에 해당하는 인증 요청을 찾을 수 없습니다."
+// @Failure      400      {object}  errors.AppError  "ErrShouldBindJson(5001): 잘못된 JSON 형식입니다. / ErrUserAlreadyExists(103): 이미 존재하는 사용자입니다."
 // @Failure      500      {object}  errors.AppError  "ErrInternalServer(5000): 비밀번호 암호화 실패 / ErrDatabase(9999): 사용자 저장 실패"
 // @Router       /api/v1/auth/register [post]
 func (h *AuthHandler) RegisterLocalUser(c *gin.Context) {

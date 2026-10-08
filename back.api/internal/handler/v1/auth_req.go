@@ -2,6 +2,7 @@ package v1
 
 type RegisterRequest struct {
 	ID  int    `json:"id"`
+	Nickname string `json:"nickname"`
 	Password   string `json:"password"`
 	Name       string `json:"name"`
 	Email      string `json:"email"`

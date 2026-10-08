@@ -12,7 +12,6 @@ const (
 type User struct {
 	ID       int      `json:"id" gorm:"primaryKey"`
 	Nickname string 	`json:"nickname"`
-	Email    string   `json:"email" gorm:"unique;not null"`
 	PasswordHash string   `json:"password" gorm:"not null"`
 	Role     RoleType `json:"role" gorm:"type:enum('user', 'admin');default:'user'"`
 }

@@ -47,7 +47,6 @@ func (s *authSvcImpl) RegisterUser(ctx context.Context, ID int, email string, na
 
 	user := &domain.User{
 		ID:    ID,
-		Email:        email,
 		PasswordHash: hashedPassword,
 		Role:         domain.DefaultRole, // Set default role
 	}

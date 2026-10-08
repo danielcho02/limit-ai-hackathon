@@ -20,6 +20,12 @@ const (
 	EmailVerificationErrorCode ErrorCode = 1001
 	EmailVerificationNotFoundErrorCode ErrorCode = 1002
 
+	// 2. Post
+	PostNotFountErrorCode ErrorCode = 2001
+
+	// 3. File
+	FileNotFoundErrorCode ErrorCode = 3001
+
 	// Internal Server Error
 	InternalServerErrorCode ErrorCode = 5000
 	ShouldBindJsonErrorCode  ErrorCode = 5001
@@ -48,6 +54,12 @@ var (
 	ErrEmailVerificationExpired = NewAppError(400, EmailVerificationErrorCode, "이메일 인증 코드가 만료되었습니다.")
 	ErrEmailVerificationNotFound = NewAppError(404, EmailVerificationNotFoundErrorCode, "이메일 인증 정보를 찾을 수 없습니다.")
 	ErrInvalidResetPasswordRequest = NewAppError(400, EmailVerificationErrorCode, "이메일 인증 정보가 일치하지 않습니다.")
+
+	// Post 관련
+	ErrPostNotFound = NewAppError(404, PostNotFountErrorCode, "이메일 인증에 실패했습니다.")
+
+	// File 관련
+	ErrFileNotFound = NewAppError(404, FileNotFoundErrorCode, "존재하지 않는 파일입니다.")
 
 	// System 관련
 	ErrShouldBindJson = NewAppError(400, ShouldBindJsonErrorCode, "잘못된 JSON 형식입니다.")
