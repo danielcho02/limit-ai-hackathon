@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "nativewind": "^4.2.7",
+    "react-native-reanimated": "^4.7.1",
+    "react-native-safe-area-context": "^5.10.1",
+    "tailwindcss": "^3.4.19"
+  }
+}
