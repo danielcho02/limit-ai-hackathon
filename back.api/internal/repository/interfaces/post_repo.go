@@ -13,7 +13,7 @@ type PostRepository interface {
 
 	AttachFiles(ctx context.Context, postID int, fileIDs []int) error
 	IncrementViews(ctx context.Context, postID int) error
-	Update(ctx context.Context, postID int, title string, content string, categoryID domain.CategoryType) error
+	Update(ctx context.Context, postID int, title string, content string, categoryID domain.CategoryType, typeID domain.PostType) error
 	Delete(ctx context.Context, postID int) error
 }
 

@@ -534,7 +534,7 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "category_id는 다음과 같습니다.(0: 공지 1: 예술 2: 환경 3: 교육 4: 상담 5: 스포츠 6: 미용 7: 기타)",
+                "description": "category_id는 다음과 같습니다.(0: 공지 1: 예술 2: 환경 3: 교육 4: 상담 5: 스포츠 6: 미용 7: 기타). type_id는 봉사 제공 게시글(101), 봉사 검색 게시글(102)입니다.",
                 "consumes": [
                     "application/json"
                 ],
@@ -899,6 +899,69 @@
                     }
                 }
             }
+        },
+        "/api/v1/user/profile": {
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "사용자가 자신의 닉네임과 프로필 이미지를 수정할 수 있는 엔드포인트입니다.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "사용자 프로필 정보 수정",
+                "parameters": [
+                    {
+                        "description": "유저 정보 수정 요청 파라미터",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.UpdateUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "ErrShouldBindJson(5001): 잘못된 JSON 형식입니다. / ErrBadRequest(5001): nickname 또는 profile_image_id가 누락되었습니다.",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    },
+                    "401": {
+                        "description": "ErrTokenMissing(105): 인증 토큰이 누락되었습니다. / ErrInvalidAuthHeader(104): 유효하지 않은 Authorization 헤더입니다.",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    },
+                    "403": {
+                        "description": "ErrUnauthorized(106): 인증되지 않은 사용자입니다.",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    },
+                    "500": {
+                        "description": "ErrDatabase(9999): 데이터베이스 처리 중 오류가 발생했습니다.",
+                        "schema": {
+                            "$ref": "#/definitions/errors.AppError"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -946,6 +1009,24 @@
                 "BeautyPost",
                 "ETCPost",
                 "CategoryTypeMax"
+            ]
+        },
+        "domain.PostType": {
+            "type": "integer",
+            "enum": [
+                101,
+                102
+            ],
+            "x-enum-comments": {
+                "RequestPost": "102"
+            },
+            "x-enum-descriptions": [
+                "",
+                "102"
+            ],
+            "x-enum-varnames": [
+                "ProviderPost",
+                "RequestPost"
             ]
         },
         "domain.RoleType": {
@@ -1110,6 +1191,9 @@
                 },
                 "title": {
                     "type": "string"
+                },
+                "type_id": {
+                    "$ref": "#/definitions/domain.PostType"
                 }
             }
         },
@@ -1159,6 +1243,9 @@
                 },
                 "title": {
                     "type": "string"
+                },
+                "type_id": {
+                    "$ref": "#/definitions/domain.PostType"
                 },
                 "updated_at": {
                     "type": "string"
@@ -1225,6 +1312,9 @@
                 "title": {
                     "type": "string"
                 },
+                "type_id": {
+                    "$ref": "#/definitions/domain.PostType"
+                },
                 "views": {
                     "type": "integer"
                 }
@@ -1280,6 +1370,20 @@
                     }
                 },
                 "title": {
+                    "type": "string"
+                },
+                "type_id": {
+                    "$ref": "#/definitions/domain.PostType"
+                }
+            }
+        },
+        "v1.UpdateUserRequest": {
+            "type": "object",
+            "properties": {
+                "nickname": {
+                    "type": "string"
+                },
+                "profile_image_id": {
                     "type": "string"
                 }
             }

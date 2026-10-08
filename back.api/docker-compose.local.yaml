@@ -3,7 +3,7 @@ version: "3.9"
 services:
   postgres:
     image: postgres:16
-    container_name: dasom-postgres-local
+    container_name: limitthon-postgres-local
     restart: unless-stopped
 
     ports:
@@ -12,15 +12,15 @@ services:
     command: postgres -c max_connections=100 -c superuser_reserved_connections=5
     
     environment:
-      POSTGRES_USER: testuser
+      POSTGRES_USER: test
       POSTGRES_PASSWORD: testpw
-      POSTGRES_DB: dasomweb
+      POSTGRES_DB: limitthon
 
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U test -d dasomweb"]
+      test: ["CMD-SHELL", "pg_isready -U test -d limitthon"]
       interval: 10s
       timeout: 5s
       retries: 5

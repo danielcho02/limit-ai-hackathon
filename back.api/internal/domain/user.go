@@ -12,6 +12,6 @@ type User struct {
 	ID       int      `json:"id" gorm:"primaryKey"`
 	Nickname string 	`json:"nickname"`
 	PasswordHash string   `json:"password" gorm:"not null"`
-	Role     RoleType `json:"role" gorm:"type:enum('user', 'admin');default:'user'"`
-	ProfileImageID int `json:"profile_image_id"`
+	Role     RoleType `json:"role" gorm:"not null"`
+	ProfileImageID int `json:"profile_image_id" gorm:"not null"`
 }

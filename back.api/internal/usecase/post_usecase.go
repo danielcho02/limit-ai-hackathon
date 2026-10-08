@@ -68,7 +68,7 @@ func (p *PostUseCaseImpl) GetPostDetail(ctx context.Context, postID int) (*domai
 	return p.postRepo.GetByID(ctx, postID)
 }
 
-func (p *PostUseCaseImpl) UpdatePost(ctx context.Context, postID int, userID int, role domain.RoleType, title string, content string, categoryID domain.CategoryType, files []int) (*domain.Post, error) {
+func (p *PostUseCaseImpl) UpdatePost(ctx context.Context, postID int, userID int, role domain.RoleType, title string, content string, categoryID domain.CategoryType, typeID domain.PostType, files []int) (*domain.Post, error) {
 	post, err := p.postRepo.GetByID(ctx, postID)
 	if err != nil {
 		return nil, err
@@ -77,7 +77,7 @@ func (p *PostUseCaseImpl) UpdatePost(ctx context.Context, postID int, userID int
 		return nil, errors.ErrForbidden
 	}
 
-	if err := p.postRepo.Update(ctx, postID, title, content, categoryID); err != nil {
+	if err := p.postRepo.Update(ctx, postID, title, content, categoryID, typeID); err != nil {
 		return nil, err
 	}
 

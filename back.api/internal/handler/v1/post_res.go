@@ -10,6 +10,7 @@ type PostInfo struct {
 	Title string `json:"title"`
 	AuthorName string `json:"author_name"`
 	CategoryID domain.CategoryType `json:"category_id"`
+	TypeID domain.PostType `json:"type_id"`
 	Views int `json:"views"`
 	CommentCount int `json:"comment_count"`
 	CreatedAt string `json:"created_at"`
@@ -21,6 +22,8 @@ type CreatePostResponse struct {
 	Content string `json:"content" validate:"required"`
 
 	CategoryID int `json:"category_id" validate:"required"`
+
+	TypeID domain.PostType `json:"type_id"`
 
 	Files []int `json:"files"`
 }
@@ -53,6 +56,7 @@ type GetPostDetailResponse struct {
 	AuthorID int `json:"author_id"`
 	AuthorName string `json:"author_name"`
 	CategoryID domain.CategoryType `json:"category_id"`
+	TypeID domain.PostType `json:"type_id"`
 
 	Views int `json:"views"`
 

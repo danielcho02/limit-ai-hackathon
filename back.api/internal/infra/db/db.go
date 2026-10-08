@@ -25,10 +25,10 @@ func InitPostgreSQL(cfg config.DBConfig) (*gorm.DB, error) {
 
 func AutoMigrate(db *gorm.DB) {
 	err := db.AutoMigrate(
+		&domain.Post{},
 		&domain.File{},
 		&domain.User{},
 		&domain.Comment{},
-		&domain.Post{},
 	)
 
 	if err != nil {

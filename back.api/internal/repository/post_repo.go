@@ -185,12 +185,14 @@ func (r *postRepoImpl) Update(
 	title string,
 	content string,
 	categoryID domain.CategoryType,
+	typeID domain.PostType,
 ) error {
 
 	updateData := map[string]interface{}{
 		"title":       title,
 		"content":     content,
 		"category_id": categoryID,
+		"type_id": typeID,
 	}
 
 	result := r.db.WithContext(ctx).

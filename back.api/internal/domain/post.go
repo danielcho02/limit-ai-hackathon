@@ -6,7 +6,6 @@ import (
 
 type CategoryType int
 
-
 const (
 	NoticePost CategoryType = iota // 0 공지글
 	ArtPost // 1 예술
@@ -20,6 +19,13 @@ const (
 	CategoryTypeMax
 )
 
+type PostType int
+
+const (
+	ProviderPost PostType = iota + 101
+	RequestPost // 102
+)
+
 type Post struct {
 	ID      int `gorm:"primaryKey"`
 
@@ -28,6 +34,7 @@ type Post struct {
 	AuthorID  int
 	AuthorName string `gorm:"->"`
 	CategoryID CategoryType `gorm:"index"`
+	TypeID PostType `gorm:"index"`
 
 	Content string
 
@@ -49,6 +56,7 @@ type PostInfo struct {
 	Title string `json:"title"`
 	AuthorName string `json:"author_name"`
 	CategoryID CategoryType `json:"category_id"`
+	TypeID PostType `json:"post_type"`
 	Views int `json:"views"`
 	CommentCount int `json:"comment_count"`
 	CreatedAt time.Time `json:"created_at"`
@@ -58,6 +66,7 @@ type PostQuery struct {
 	// options
 	Title *string
 	CategoryID *int
+	TypeID *int
 	AuthorID *int
 
 	// offset pagination

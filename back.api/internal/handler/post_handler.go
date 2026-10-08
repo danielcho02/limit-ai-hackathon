@@ -28,7 +28,7 @@ func NewPostHandler(uc interfaces.PostUsecase, cfg config.Config) *PostHandler {
 
 // CreatePost godoc
 // @Summary      게시글 생성
-// @Description  category_id는 다음과 같습니다.(0: 공지 1: 예술 2: 환경 3: 교육 4: 상담 5: 스포츠 6: 미용 7: 기타)
+// @Description  category_id는 다음과 같습니다.(0: 공지 1: 예술 2: 환경 3: 교육 4: 상담 5: 스포츠 6: 미용 7: 기타). type_id는 봉사 제공 게시글(101), 봉사 검색 게시글(102)입니다.
 // @Security     BearerAuth
 // @Tags         Post
 // @Accept       json
@@ -73,7 +73,9 @@ func (h *PostHandler) CreatePost(c *gin.Context) {
 		Content:    req.Content,
 		AuthorID:   user_id.(int),
 		CategoryID: req.CategoryID,
+		TypeID: req.TypeID,
 	}
+
 	createdPost, err := h.uc.CreatePost(ctx, post, req.Files)
 	if err != nil {
 		c.Error(err)
@@ -196,7 +198,7 @@ func (h *PostHandler) UpdatePost(c *gin.Context) {
 		return
 	}
 
-	updatedPost, err := h.uc.UpdatePost(ctx, id, userID.(int), userRole, req.Title, req.Content, req.CategoryID, req.Files)
+	updatedPost, err := h.uc.UpdatePost(ctx, id, userID.(int), userRole, req.Title, req.Content, req.CategoryID, req.TypeID, req.Files)
 	if err != nil {
 		c.Error(err)
 		return
